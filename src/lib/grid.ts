@@ -59,4 +59,14 @@ export interface Grid2D<T> {
      * @return {boolean} True if the item was removed, false otherwise.
      */
     remove(id: number): boolean;
+
+    /**
+     * Updates the coordinates and optionally the radius of an item in the grid.
+     * @param id - The id of the item to update.
+     * @param coords - The new x, y coordinates for the item.
+     * @param radius - The new radius for the item (optional).
+     * @return {boolean} True if the item was updated successfully, false if the item was not found.
+     * @throws {Error} If the coordinates are out of bounds for the grid.
+     */
+    update(id: number, coords: Vector2, radius?: number): boolean;
 }

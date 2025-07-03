@@ -13,25 +13,10 @@ export interface Vector2 {
     readonly y: number;
 }
 
-/**
- * Represents a 3D vector with x, y, and z coordinates.
- */
-export interface Vector3 extends Vector2 {
-    /**
-     * The z coordinate of the vector.
-     */
-    readonly z: number;
-}
-
-interface DistanceSquaredFn {
+export const distanceSquared: {
+    (a: IVector3, b: IVector3): number;
     (a: Vector2, b: Vector2): number;
-    (a: Vector3, b: Vector3): number;
-}
-
-export const distanceSquared: DistanceSquaredFn = (
-    a: Vector2 | Vector3,
-    b: Vector2 | Vector3
-): number => {
+} = (a: Vector2 | IVector3, b: Vector2 | IVector3): number => {
     const dx = a.x - b.x;
     const dy = a.y - b.y;
     if ('z' in a && 'z' in b) {

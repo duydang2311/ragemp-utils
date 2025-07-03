@@ -4,7 +4,8 @@
     "": {
       "name": "@duydang2311/ragemp-utils",
       "devDependencies": {
-        "@types/bun": "latest",
+        "@ragempcommunity/types-client": "^2.1.9",
+        "@types/bun": "^1.2.17",
         "tsup": "^8.5.0",
       },
       "peerDependencies": {
@@ -82,6 +83,8 @@
     "@microsoft/tsdoc-config": ["@microsoft/tsdoc-config@0.17.1", "", { "dependencies": { "@microsoft/tsdoc": "0.15.1", "ajv": "~8.12.0", "jju": "~1.4.0", "resolve": "~1.22.2" } }, "sha512-UtjIFe0C6oYgTnad4q1QP4qXwLhe6tIpNTRStJ2RZEPIkqQPREAwE5spzVxsdn9UaEMUqhh0AqSx3X4nWAKXWw=="],
 
     "@pkgjs/parseargs": ["@pkgjs/parseargs@0.11.0", "", {}, "sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg=="],
+
+    "@ragempcommunity/types-client": ["@ragempcommunity/types-client@2.1.9", "", {}, "sha512-D6SdgzyyuHdQyVDSPVohII6EWbwmWTmOBynVU9BcIHxvtVbr82ZmQ+YzMVlihcEiOk/nt8aeWSzcrWdXXHkgeA=="],
 
     "@rollup/rollup-android-arm-eabi": ["@rollup/rollup-android-arm-eabi@4.44.1", "", { "os": "android", "cpu": "arm" }, "sha512-JAcBr1+fgqx20m7Fwe1DxPUl/hPkee6jA6Pl7n1v2EFiktAHenTaXl5aIFjUIEsfn9w3HE4gK1lEgNGMzBDs1w=="],
 

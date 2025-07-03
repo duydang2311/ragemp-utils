@@ -145,6 +145,69 @@ export class SpatialGrid2D<T> implements Grid2D<T> {
         return id;
     }
 
+    public update(id: number, coords: Vector2, radius?: number) {
+        const itemLookup = this.#idLookup.get(id);
+        if (!itemLookup) {
+            return false;
+        }
+
+        const [lookUpCells] = itemLookup;
+        let item: T | undefined;
+        for (const cell of lookUpCells) {
+            item = this.#cells[cell]!.find(
+                (cellItem) => cellItem[0] === id
+            )?.[1];
+            if (item) {
+                break;
+            }
+        }
+        if (!item || !this.remove(id)) {
+            return false;
+        }
+
+        if (radius == null) {
+            const cellIndex = this.#safeCellAt(coords);
+            this.#cells[cellIndex]!.push([id, item]);
+            this.#idLookup.set(id, [[cellIndex]]);
+            return true;
+        }
+
+        const minCol = Math.max(
+            0,
+            Math.floor(
+                (coords.x - (radius ?? 0) - this.#min.x) / this.#cellSize
+            )
+        );
+        const maxCol = Math.min(
+            this.#columns - 1,
+            Math.floor(
+                (coords.x + (radius ?? 0) - this.#min.x) / this.#cellSize
+            )
+        );
+        const minRow = Math.max(
+            0,
+            Math.floor(
+                (coords.y - (radius ?? 0) - this.#min.y) / this.#cellSize
+            )
+        );
+        const maxRow = Math.min(
+            this.#rows - 1,
+            Math.floor(
+                (coords.y + (radius ?? 0) - this.#min.y) / this.#cellSize
+            )
+        );
+        const cells: number[] = [];
+        for (let row = minRow; row <= maxRow; ++row) {
+            for (let col = minCol; col <= maxCol; ++col) {
+                const cellIndex = row * this.#columns + col;
+                cells.push(cellIndex);
+                this.#cells[cellIndex]!.push([id, item, radius]);
+            }
+        }
+        this.#idLookup.set(id, [cells]);
+        return true;
+    }
+
     public remove(id: number): boolean {
         const itemLookup = this.#idLookup.get(id);
         if (!itemLookup) {
