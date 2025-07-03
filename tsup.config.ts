@@ -6,5 +6,6 @@ export default defineConfig({
     dts: true,
     sourcemap: true,
     clean: true,
-    target: 'node14',
+    target: 'esnext',
+    skipNodeModulesBundle: true,
 });
