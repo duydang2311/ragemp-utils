@@ -1,4 +1,4 @@
-import type { Vector2 } from './vector';
+import type { Vector2 } from './types';
 
 export interface Grid2D<T> {
     /**

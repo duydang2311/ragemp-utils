@@ -1,5 +1,5 @@
 import type { Grid2D } from './grid';
-import type { Vector2 } from './vector';
+import type { Vector2 } from './types';
 
 export interface CreateSpatialGrid2DOptions {
     min?: Vector2;

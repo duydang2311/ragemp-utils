@@ -1,0 +1,49 @@
+{
+    "name": "@duydang2311/ragemp-utils-server",
+    "version": "0.0.3",
+    "author": "duydang2311",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/duydang2311/ragemp-utils.git"
+    },
+    "devDependencies": {
+        "@ragempcommunity/types-server": "^2.1.9",
+        "@types/bun": "^1.2.17",
+        "tsup": "^8.5.0"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    },
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
+        }
+    },
+    "description": "A collection of utilities for RAGE Multiplayer JavaScript module.",
+    "files": [
+        "dist"
+    ],
+    "keywords": [
+        "ragemp",
+        "ragemp-utils",
+        "javascript",
+        "typescript",
+        "utils",
+        "vector",
+        "grid",
+        "spatial-grid"
+    ],
+    "license": "MIT",
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "build": "tsup"
+    },
+    "type": "module",
+    "dependencies": {
+        "@duydang2311/ragemp-utils-shared": "^0.0.1"
+    }
+}
