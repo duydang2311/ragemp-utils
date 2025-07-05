@@ -156,6 +156,27 @@ export class RageMpStreamedMetaStore implements StreamedMetaStore {
                 }
             }
         );
+        mp.events.add('entityDestroyed', (entity) => {
+            if (!this.#entityTypes.has(entity.type)) {
+                return;
+            }
+
+            this.#metas.delete(this.#createMetaKey(entity.type, entity.id));
+            const players = this.#streamingPlayersByEntity.get(entity);
+            if (players) {
+                for (const player of players) {
+                    const entities = this.#streamedEntitiesByPlayer.get(player);
+                    if (!entities) {
+                        continue;
+                    }
+                    entities.delete(entity);
+                    if (entities.size === 0) {
+                        this.#streamedEntitiesByPlayer.delete(player);
+                    }
+                }
+                this.#streamingPlayersByEntity.delete(entity);
+            }
+        });
     }
 
     set<K extends keyof StreamedMetaSchema>(
