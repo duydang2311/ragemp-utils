@@ -1,16 +1,17 @@
-import type { EntityType } from '@duydang2311/ragemp-utils-shared';
+import type {
+    EntityType,
+    StreamedMetaSchema,
+} from '@duydang2311/ragemp-utils-shared';
 
 export type StreamedMetaOnChangeFn = <
-    K extends keyof StreamedMetaEntry,
-    V extends StreamedMetaEntry[K]
+    K extends keyof StreamedMetaSchema,
+    V extends StreamedMetaSchema[K]
 >(
     entity: EntityMp,
     name: K,
     currentValue: V | undefined,
     previousValue: V | undefined
 ) => void;
-
-export interface StreamedMetaEntry {}
 
 export interface StreamedMetaStore {
     init(): void;
@@ -97,7 +98,7 @@ export class RageMpStreamedMetaStore implements StreamedMetaStore {
                 for (const handler of this.#changeHandlers) {
                     handler(
                         entity,
-                        name as keyof StreamedMetaEntry,
+                        name as keyof StreamedMetaSchema,
                         current,
                         previous
                     );
