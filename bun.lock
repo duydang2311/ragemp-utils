@@ -6,7 +6,7 @@
     },
     "packages/client": {
       "name": "@duydang2311/ragemp-utils-client",
-      "version": "0.0.3",
+      "version": "0.0.5",
       "dependencies": {
         "@duydang2311/ragemp-utils-shared": "^0.0.1",
       },
@@ -16,12 +16,24 @@
         "tsup": "^8.5.0",
       },
       "peerDependencies": {
+        "@duydang2311/ragemp-utils-meta": "^0.0.1",
+        "typescript": "^5",
+      },
+    },
+    "packages/meta": {
+      "name": "@duydang2311/ragemp-utils-meta",
+      "version": "0.0.1",
+      "devDependencies": {
+        "@types/bun": "^1.2.17",
+        "tsup": "^8.5.0",
+      },
+      "peerDependencies": {
         "typescript": "^5",
       },
     },
     "packages/server": {
       "name": "@duydang2311/ragemp-utils-server",
-      "version": "0.0.3",
+      "version": "0.0.6",
       "dependencies": {
         "@duydang2311/ragemp-utils-shared": "^0.0.1",
       },
@@ -31,12 +43,13 @@
         "tsup": "^8.5.0",
       },
       "peerDependencies": {
+        "@duydang2311/ragemp-utils-meta": "^0.0.1",
         "typescript": "^5",
       },
     },
     "packages/shared": {
       "name": "@duydang2311/ragemp-utils-shared",
-      "version": "0.0.1",
+      "version": "0.0.4",
       "devDependencies": {
         "@types/bun": "^1.2.17",
         "tsup": "^8.5.0",
@@ -48,6 +61,8 @@
   },
   "packages": {
     "@duydang2311/ragemp-utils-client": ["@duydang2311/ragemp-utils-client@workspace:packages/client"],
+
+    "@duydang2311/ragemp-utils-meta": ["@duydang2311/ragemp-utils-meta@workspace:packages/meta"],
 
     "@duydang2311/ragemp-utils-server": ["@duydang2311/ragemp-utils-server@workspace:packages/server"],
 
@@ -326,6 +341,10 @@
     "wrap-ansi": ["wrap-ansi@8.1.0", "", { "dependencies": { "ansi-styles": "^6.1.0", "string-width": "^5.0.1", "strip-ansi": "^7.0.1" } }, "sha512-si7QWI6zUMq56bESFvagtmzMdGOtoxfR+Sez11Mobfc7tm+VkUckk9bW2UeffTGVUbOksxmSw0AA2gs8g71NCQ=="],
 
     "wrap-ansi-cjs": ["wrap-ansi@7.0.0", "", { "dependencies": { "ansi-styles": "^4.0.0", "string-width": "^4.1.0", "strip-ansi": "^6.0.0" } }, "sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q=="],
+
+    "@duydang2311/ragemp-utils-client/@duydang2311/ragemp-utils-shared": ["@duydang2311/ragemp-utils-shared@0.0.1", "", { "peerDependencies": { "typescript": "^5" } }, "sha512-UIqeCHX860c9Ds+cFw8yVjGcCefeflSnu/szj99SWTsQky98H7rhdIvH+Y00/QcbdQuMdcsegm8sc88wAbMk5Q=="],
+
+    "@duydang2311/ragemp-utils-server/@duydang2311/ragemp-utils-shared": ["@duydang2311/ragemp-utils-shared@0.0.1", "", { "peerDependencies": { "typescript": "^5" } }, "sha512-UIqeCHX860c9Ds+cFw8yVjGcCefeflSnu/szj99SWTsQky98H7rhdIvH+Y00/QcbdQuMdcsegm8sc88wAbMk5Q=="],
 
     "string-width-cjs/emoji-regex": ["emoji-regex@8.0.0", "", {}, "sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A=="],
 

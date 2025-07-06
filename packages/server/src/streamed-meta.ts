@@ -1,7 +1,5 @@
-import type {
-    EntityType,
-    StreamedMetaSchema,
-} from '@duydang2311/ragemp-utils-shared';
+import type { StreamedMetaSchema } from '@duydang2311/ragemp-utils-meta';
+import type { EntityType } from '@duydang2311/ragemp-utils-shared';
 
 export type StreamedMetaOnChangeFn = <
     K extends keyof StreamedMetaSchema,
