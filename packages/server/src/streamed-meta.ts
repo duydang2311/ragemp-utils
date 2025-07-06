@@ -78,15 +78,16 @@ export class RageMpStreamedMetaStore implements StreamedMetaStore {
         mp.events.add(
             this.#streamedInEventName,
             (player: PlayerMp, entityType: EntityType, remoteId: number) => {
+                if (!this.#entityTypes.has(entityType)) {
+                    return;
+                }
+
                 if (this.#debug) {
                     console.log(
                         `[StreamedMetaStore] ${this.#streamedInEventName}, ${
                             player.name
                         }, ${entityType}, ${remoteId}`
                     );
-                }
-                if (!this.#entityTypes.has(entityType)) {
-                    return;
                 }
 
                 const entity = RageMpStreamedMetaStore.#poolByType
@@ -174,13 +175,14 @@ export class RageMpStreamedMetaStore implements StreamedMetaStore {
             }
         );
         mp.events.add('entityDestroyed', (entity) => {
+            if (!this.#entityTypes.has(entity.type)) {
+                return;
+            }
+
             if (this.#debug) {
                 console.log(
                     `[StreamedMetaStore] entityDestroyed, ${entity.type}, ${entity.id}`
                 );
-            }
-            if (!this.#entityTypes.has(entity.type)) {
-                return;
             }
 
             this.#metas.delete(this.#createMetaKey(entity.type, entity.id));
@@ -281,6 +283,13 @@ export class RageMpStreamedMetaStore implements StreamedMetaStore {
 
     #getPlayersStreamingEntity(entity: EntityMp) {
         const players = this.#streamingPlayersByEntity.get(entity);
-        return players ? Array.from(players) : [];
+        const arr = players ? Array.from(players) : [];
+        if (entity.type === 'player') {
+            players?.add(entity as PlayerMp);
+        }
+        if (entity.type === 'player') {
+            arr.push(entity as PlayerMp);
+        }
+        return arr;
     }
 }
