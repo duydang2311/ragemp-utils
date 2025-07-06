@@ -23,6 +23,7 @@ export interface CreateRageMpStreamedMetaStoreOptions {
     changeEventName?: string;
     streamedInEventName?: string;
     streamedOutEventName?: string;
+    debug?: boolean;
 }
 
 export class RageMpStreamedMetaStore implements StreamedMetaStore {
@@ -44,6 +45,7 @@ export class RageMpStreamedMetaStore implements StreamedMetaStore {
     #changeEventName: string;
     #streamedInEventName: string;
     #streamedOutEventName: string;
+    #debug: boolean;
 
     constructor(options?: CreateRageMpStreamedMetaStoreOptions) {
         this.#entityTypes = new Set(options?.entityTypes ?? []);
@@ -53,10 +55,16 @@ export class RageMpStreamedMetaStore implements StreamedMetaStore {
             options?.streamedInEventName ?? 'streamedMeta.streamedIn';
         this.#streamedOutEventName =
             options?.streamedOutEventName ?? 'streamedMeta.streamedOut';
+        this.#debug = options?.debug ?? false;
     }
 
     init() {
         mp.events.add('entityStreamIn', (entity: EntityMp) => {
+            if (this.#debug) {
+                mp.console.logInfo(
+                    `[StreamedMetaStore] entityStreamIn, ${entity.type}, ${entity.remoteId}`
+                );
+            }
             if (!this.#entityTypes.has(entity.type)) {
                 return;
             }
@@ -67,6 +75,11 @@ export class RageMpStreamedMetaStore implements StreamedMetaStore {
             );
         });
         mp.events.add('entityStreamOut', (entity: EntityMp) => {
+            if (this.#debug) {
+                mp.console.logInfo(
+                    `[StreamedMetaStore] entityStreamOut, ${entity.type}, ${entity.remoteId}`
+                );
+            }
             if (!this.#entityTypes.has(entity.type)) {
                 return;
             }
@@ -85,6 +98,13 @@ export class RageMpStreamedMetaStore implements StreamedMetaStore {
                 current: any,
                 previous: any
             ) => {
+                if (this.#debug) {
+                    mp.console.logInfo(
+                        `[StreamedMetaStore] ${
+                            this.#changeEventName
+                        }, ${type}, ${remoteId}, ${name}, ${current}, ${previous}`
+                    );
+                }
                 const pool = RageMpStreamedMetaStore.#poolByType.get(type);
                 if (!pool) {
                     return;

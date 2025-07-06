@@ -32,6 +32,7 @@ export interface CreateRageMpStreamedMetaStoreOptions {
     changeEventName?: string;
     streamedInEventName?: string;
     streamedOutEventName?: string;
+    debug?: boolean;
 }
 
 export class RageMpStreamedMetaStore implements StreamedMetaStore {
@@ -60,6 +61,7 @@ export class RageMpStreamedMetaStore implements StreamedMetaStore {
     #changeEventName: string;
     #streamedInEventName: string;
     #streamedOutEventName: string;
+    #debug: boolean;
 
     constructor(options?: CreateRageMpStreamedMetaStoreOptions) {
         this.#entityTypes = new Set(options?.entityTypes ?? []);
@@ -69,12 +71,20 @@ export class RageMpStreamedMetaStore implements StreamedMetaStore {
             options?.streamedInEventName ?? 'streamedMeta.streamedIn';
         this.#streamedOutEventName =
             options?.streamedOutEventName ?? 'streamedMeta.streamedOut';
+        this.#debug = options?.debug ?? false;
     }
 
     init(): void {
         mp.events.add(
             this.#streamedInEventName,
             (player: PlayerMp, entityType: EntityType, remoteId: number) => {
+                if (this.#debug) {
+                    console.log(
+                        `[StreamedMetaStore] ${this.#streamedInEventName}, ${
+                            player.name
+                        }, ${entityType}, ${remoteId}`
+                    );
+                }
                 if (!this.#entityTypes.has(entityType)) {
                     return;
                 }
@@ -127,6 +137,13 @@ export class RageMpStreamedMetaStore implements StreamedMetaStore {
         mp.events.add(
             this.#streamedOutEventName,
             (player: PlayerMp, entityType: EntityType, remoteId: number) => {
+                if (this.#debug) {
+                    console.log(
+                        `[StreamedMetaStore] ${this.#streamedOutEventName}, ${
+                            player.name
+                        }, ${entityType}, ${remoteId}`
+                    );
+                }
                 if (!this.#entityTypes.has(entityType)) {
                     return;
                 }
@@ -157,6 +174,11 @@ export class RageMpStreamedMetaStore implements StreamedMetaStore {
             }
         );
         mp.events.add('entityDestroyed', (entity) => {
+            if (this.#debug) {
+                console.log(
+                    `[StreamedMetaStore] entityDestroyed, ${entity.type}, ${entity.id}`
+                );
+            }
             if (!this.#entityTypes.has(entity.type)) {
                 return;
             }
