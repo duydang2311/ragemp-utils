@@ -1,19 +1,19 @@
 import type { StreamedMetaSchema } from '@duydang2311/ragemp-utils-meta';
 import type { EntityType } from '@duydang2311/ragemp-utils-shared';
 
-export type StreamedMetaOnChangeFn = <
-    K extends keyof StreamedMetaSchema,
-    V extends StreamedMetaSchema[K]
->(
+export type StreamedMetaOnChangeFn<V> = (
     entity: EntityMp,
-    name: K,
     currentValue: V | undefined,
     previousValue: V | undefined
 ) => void;
 
 export interface StreamedMetaStore {
     init(): void;
-    on(eventName: 'change', fn: StreamedMetaOnChangeFn): () => void;
+    on<K extends keyof StreamedMetaSchema, V extends StreamedMetaSchema[K]>(
+        eventName: 'change',
+        name: K,
+        fn: StreamedMetaOnChangeFn<V>
+    ): () => void;
 }
 
 export interface CreateRageMpStreamedMetaStoreOptions {
@@ -38,7 +38,8 @@ export class RageMpStreamedMetaStore implements StreamedMetaStore {
         ['ped', mp.peds],
         ['textlabel', mp.labels],
     ]);
-    #changeHandlers: Set<StreamedMetaOnChangeFn> = new Set();
+    #changeHandlersByName: Map<string, Set<StreamedMetaOnChangeFn<unknown>>> =
+        new Map();
     #entityTypes: Set<string>;
     #changeEventName: string;
     #streamedInEventName: string;
@@ -113,30 +114,48 @@ export class RageMpStreamedMetaStore implements StreamedMetaStore {
                     return;
                 }
 
-                for (const handler of this.#changeHandlers) {
-                    handler(
-                        entity,
-                        name as keyof StreamedMetaSchema,
-                        current,
-                        previous
-                    );
+                const handlers = this.#changeHandlersByName.get(name);
+                if (handlers) {
+                    for (const handler of handlers) {
+                        handler(entity, current, previous);
+                    }
                 }
             }
         );
     }
 
-    public on(eventName: 'change', fn: StreamedMetaOnChangeFn): () => void;
-    public on(eventName: string, fn: StreamedMetaOnChangeFn) {
+    public on<
+        K extends keyof StreamedMetaSchema,
+        V extends StreamedMetaSchema[K]
+    >(eventName: 'change', name: K, fn: StreamedMetaOnChangeFn<V>): () => void;
+    public on<
+        K extends keyof StreamedMetaSchema,
+        V extends StreamedMetaSchema[K]
+    >(eventName: 'change', name: K, fn: StreamedMetaOnChangeFn<V>) {
         switch (eventName) {
             case 'change':
-                this.#changeHandlers.add(fn);
-                break;
+                let handlers = this.#changeHandlersByName.get(name);
+                if (!handlers) {
+                    handlers = new Set<StreamedMetaOnChangeFn<unknown>>([
+                        fn as StreamedMetaOnChangeFn<unknown>,
+                    ]);
+                    this.#changeHandlersByName.set(
+                        name,
+                        new Set<StreamedMetaOnChangeFn<unknown>>([
+                            fn as StreamedMetaOnChangeFn<unknown>,
+                        ])
+                    );
+                } else {
+                    handlers.add(fn as StreamedMetaOnChangeFn<unknown>);
+                }
+                return () => {
+                    handlers.delete(fn as StreamedMetaOnChangeFn<unknown>);
+                    if (handlers.size === 0) {
+                        this.#changeHandlersByName.delete(name);
+                    }
+                };
             default:
                 throw new Error(`Unsupported event: ${eventName}`);
         }
-
-        return () => {
-            this.#changeHandlers.delete(fn);
-        };
     }
 }
