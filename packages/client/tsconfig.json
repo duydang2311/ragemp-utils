@@ -27,6 +27,6 @@
         "noUnusedParameters": false,
         "noPropertyAccessFromIndexSignature": false,
 
-        "types": ["@ragempcommunity/types-client"]
+        "types": ["@ragempcommunity/types-client", "@types/node"]
     }
 }

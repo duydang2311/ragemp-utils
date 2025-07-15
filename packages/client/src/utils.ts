@@ -23,16 +23,20 @@ export const until = (predicate: () => boolean) => {
     return (options?: { timeoutMs?: number; intervalMs?: number }) => {
         const id = ++untilCounter;
         let scopedResolve: () => void = undefined!;
+        let timeout: NodeJS.Timeout | undefined;
         const promise = new Promise<void>((resolve, reject) => {
             scopedResolve = resolve;
             if (options?.timeoutMs != null) {
-                setTimeout(() => {
+                timeout = setTimeout(() => {
                     reject(
                         'Timeout reached while waiting for predicate to be true'
                     );
                 }, options.timeoutMs);
             }
         }).finally(() => {
+            if (timeout != null) {
+                clearTimeout(timeout);
+            }
             untilPredicates.delete(id);
         });
         const addRender = untilPredicates.size === 0;
