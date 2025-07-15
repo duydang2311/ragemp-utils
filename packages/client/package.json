@@ -1,6 +1,6 @@
 {
     "name": "@duydang2311/ragemp-utils-client",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "author": "duydang2311",
     "repository": {
         "type": "git",
@@ -46,6 +46,6 @@
     },
     "type": "module",
     "dependencies": {
-        "@duydang2311/ragemp-utils-shared": "^0.0.1"
+        "@duydang2311/ragemp-utils-shared": "^0.0.7"
     }
 }
