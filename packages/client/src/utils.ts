@@ -9,6 +9,7 @@ const untilPredicates: Map<
 > = new Map();
 
 let untilCounter = 0;
+let untilRenderAdded = false;
 
 /**
  * Returns a function that waits until the given predicate returns true, optionally with a timeout.
@@ -39,15 +40,15 @@ export const until = (predicate: () => boolean) => {
             }
             untilPredicates.delete(id);
         });
-        const addRender = untilPredicates.size === 0;
         untilPredicates.set(id, {
             predicate,
             resolve: scopedResolve,
             accMs: 0,
             intervalMs: options?.intervalMs ?? 0,
         });
-        if (addRender) {
+        if (!untilRenderAdded) {
             mp.events.add('render', handleUntilPredicatesOnRender);
+            untilRenderAdded = true;
         }
         return promise;
     };
@@ -65,8 +66,5 @@ const handleUntilPredicatesOnRender = () => {
         if (a.predicate()) {
             a.resolve();
         }
-    }
-    if (untilPredicates.size === 0) {
-        mp.events.remove('render', handleUntilPredicatesOnRender);
     }
 };
